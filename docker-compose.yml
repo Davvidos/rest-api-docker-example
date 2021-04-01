@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ../rest-api:/home/restapi/http
+
+  php:
+    image: php:fpm
+    volumes:
+      - ../rest-api:/home/restapi/http
