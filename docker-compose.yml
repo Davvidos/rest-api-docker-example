@@ -1,7 +1,6 @@
 version: '3'
 
 services:
-
   nginx:
     image: nginx:latest
     ports:
@@ -9,8 +8,30 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
       - ../rest-api:/home/restapi/http
+    networks:
+      - app-network
 
   php:
     image: php:fpm
     volumes:
       - ../rest-api:/home/restapi/http
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: password
+    restart: unless-stopped
+    tty: true
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
